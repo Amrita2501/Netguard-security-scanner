@@ -1,0 +1,38 @@
+# NetGuard - Enterprise Network Discovery & Security Scanner
+#
+# Usage:
+#   docker compose up --build
+#
+# Then open http://localhost:5173 and log in with admin / admin123.
+#
+# Real network scans need the container to reach your LAN and (for full
+# OS-detection accuracy) raw-socket privileges - hence `network_mode: host`
+# and the added capabilities below. On macOS/Windows Docker Desktop,
+# `network_mode: host` does not expose the host LAN the same way it does on
+# Linux; for full scanning capability on those platforms, run the backend
+# natively (see docs/SETUP.md) and use Docker for the frontend only, or run
+# both containers with `network_mode: host` on a Linux host/VM.
+services:
+  backend:
+    build: ./backend
+    container_name: netguard-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - netguard-data:/app/data
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: netguard-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  netguard-data:

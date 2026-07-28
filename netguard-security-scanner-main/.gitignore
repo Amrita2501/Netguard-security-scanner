@@ -1,0 +1,18 @@
+# Root-level ignores. Backend and frontend each have their own, more
+# specific .gitignore for language/build artifacts (see backend/.gitignore
+# and frontend/.gitignore) - this one just covers OS/editor cruft and
+# anything that could appear outside those two directories.
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Env files (defense in depth - each service also ignores its own .env)
+.env
+.env.local
